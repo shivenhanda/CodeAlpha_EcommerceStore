@@ -1,0 +1,59 @@
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+.singleproduct {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    width: 180px;
+    height: 200px;
+}
+
+.ratings {
+    background: #22c55e;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: inline-block;
+    margin: 8px 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.pagination span {
+    border: 1px solid black;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.selectedPage {
+    background-color: grey;
+}
+
+.disabledPage {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.reviewratings{
+    background: #22c55e;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
