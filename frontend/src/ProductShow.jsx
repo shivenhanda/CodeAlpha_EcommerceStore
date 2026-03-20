@@ -5,6 +5,7 @@ import FetchProductId from "./api/FetchProductId";
 
 export default function ProductShow() {
     const { id } = useParams();
+    const [liked,setLiked]=useState(false)
     const [product, setProduct] = useState(null)
     const navigate = useNavigate();
     useEffect(() => {
@@ -14,18 +15,22 @@ export default function ProductShow() {
         }
         getProduct()
     }, [id])
-    if (!product) return <p>Loading...</p>;
+    if (!product) return <p className="text-center">Loading...</p>;
     function capitalizeFirstLetter(str) {
         if (!str) return "";
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+    function AddToWishList(product){
+        setLiked(!liked)
+    }
     return (
-        <div className="product-detail md:flex flex-col w-full p-10">
+        <div className="product-detail md:flex flex-col w-full pl-2 pr-10">
             <button className="text-start" onClick={() => navigate(-1)}><i className="fa-solid fa-arrow-left"></i> Back</button>
             <h1 className="text-lg md:text-2xl text-center font-bold">{product.title}</h1>
             <div className="w-full md:flex justify-center Items-center">
                 <img className="mx-auto" src={product.thumbnail} alt={product.title} />
             </div>
+            <div className="w-full flex justify-end dropShadow"><i className={`fa-solid fa-heart text-2xl p-5 heart ${liked?"text-red-600":"text-blue-300"}`} onClick={()=>AddToWishList(product)}></i></div>
             <p className="text-lg md:text-2xl font-semibold">Category: <span className="text-base md:text-lg font-normal">{capitalizeFirstLetter(product.category)}</span></p>
             <p className="text-lg md:text-2xl font-semibold">Rating: <span className="text-base md:text-lg font-normal reviewratings"><i className="fa-regular fa-star"></i> {product.rating}</span></p>
             <p className="text-lg md:text-2xl font-semibold">Desciption: <span className="text-base md:text-lg font-normal">{product.description}</span></p>
