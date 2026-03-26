@@ -8,35 +8,44 @@ export default function WishListProvider({ children }) {
     const [count, setCount] = useState(0);
     const [list, setList] = useState([]);
     const [product, setProduct] = useState([])
-
+    const [width, setWidth] = useState(window.innerWidth)
     useEffect(() => {
-        list.map((item) => {
-            getProduct(item)
-        })
-        async function getProduct(id) {
-            let data = await FetchProductId(id);
-            setProduct([...product, data])
+        const handleSize = () => {
+            setWidth(window.innerWidth)
         }
+        window.addEventListener("resize", handleSize)
+        return () => {
+            window.removeEventListener("resize", handleSize)
+        }
+    }, [])
+    useEffect(() => {
+        async function loadProducts() {
+            const products = await Promise.all(
+                list.map((id) => FetchProductId(id))
+            );
+            setProduct(products);
+        }
+
+        loadProducts();
     }, [list])
+    function capitalizeFirstLetter(str) {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     function AddList(value) {
-        setCount(count + 1);
-        setList([...list, value])
+        if (!list.includes(value)) {
+            setCount(count + 1);
+            setList(prev => [...prev, value])
+        }
+        else {
+            setCount(count - 1)
+            setList(prev => [prev.filter((item) => item !== value)])
+        }
     }
 
     return (
-        <wishListContext.Provider value={{ count, AddList }}>
+        <wishListContext.Provider value={{ count, AddList, list, width, product }}>
             {children}
-            {
-                product.map((item) => {
-                    return <div key={item.id}>
-                        <h1 className="text-lg md:text-2xl text-center font-bold">{item.title}</h1>
-                        <div className="w-full md:flex justify-center Items-center">
-                            <img className="mx-auto" src={item.thumbnail} alt={product.title} />
-                        </div>
-                        <p className="text-lg md:text-2xl font-semibold">Desciption: <span className="text-base md:text-lg font-normal">{item.description}</span></p>
-                    </div>
-                })
-            }
         </wishListContext.Provider>
     );
 }

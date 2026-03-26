@@ -7,11 +7,12 @@ export default function ProductShow() {
     const { id } = useParams();
     const [liked, setLiked] = useState(false)
     const [product, setProduct] = useState(null)
-    const { AddList } = useContext(wishListContext)
+    const { AddList ,list} = useContext(wishListContext)
     const navigate = useNavigate();
     useEffect(() => {
         async function getProduct() {
             let data = await FetchProductId(id);
+            setLiked(list.includes(data.id))
             setProduct(data)
         }
         getProduct()

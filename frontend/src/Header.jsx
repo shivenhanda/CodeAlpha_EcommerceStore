@@ -6,7 +6,7 @@ export default function Header() {
     const { count } = useContext(wishListContext)
     return (
         <>
-            <div className="md:flex md:justify-between md:px-10 px-3  my-2">
+            <div className=" md:flex md:justify-between md:px-10 px-3  my-2 text-center">
                 <span className="text-3xl md:text-4xl text-center">BusinessEcommerceStore</span>
                 <div className="flex justify-start md:justify-between space-x-2 text-lg mt-2">
                     <Link to="/">Home</Link>

@@ -5,6 +5,7 @@ import ProductList from "./ProductList"
 import Header from "./Header"
 import WishList from "./WishList"
 import WishListProvider from "./WishList"
+import WishListPage from "./WishListPage"
 
 export default function App() {
   return(
@@ -13,7 +14,7 @@ export default function App() {
     <Header/>
     <Routes>
       <Route path="/" element={<ProductList/>}/>
-      <Route path="/wishlist" element={<WishList/>}/>
+      <Route path="/wishlist" element={<WishListPage/>}/>
       <Route path="/product/:id" element={<ProductShow/>}/>
       <Route/>
     </Routes>
