@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FetchProductId from "./api/FetchProductId";
-import { wishListContext } from "./WishList";
+import { wishListContext } from "./context/WishList";
 
 export default function ProductShow() {
     const { id } = useParams();

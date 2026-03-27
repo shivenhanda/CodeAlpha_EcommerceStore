@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { wishListContext } from "./WishList";
+import { wishListContext } from "./context/WishList";
 import { useContext } from "react";
 
 export default function Header() {

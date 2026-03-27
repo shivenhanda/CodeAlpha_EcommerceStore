@@ -3,9 +3,9 @@ import "./App.css"
 import ProductShow from "./ProductShow"
 import ProductList from "./ProductList"
 import Header from "./Header"
-import WishList from "./WishList"
-import WishListProvider from "./WishList"
-import WishListPage from "./WishListPage"
+import WishList from "./context/WishList"
+import WishListProvider from "./context/WishList"
+import WishListPage from "./context/WishListPage"
 
 export default function App() {
   return(

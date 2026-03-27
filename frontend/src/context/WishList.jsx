@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import FetchProductId from "./api/FetchProductId";
+import FetchProductId from "../api/FetchProductId";
 
 
 export const wishListContext = createContext();
@@ -28,10 +28,6 @@ export default function WishListProvider({ children }) {
 
         loadProducts();
     }, [list])
-    function capitalizeFirstLetter(str) {
-        if (!str) return "";
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
     function AddList(value) {
         if (!list.includes(value)) {
             setCount(count + 1);
@@ -39,7 +35,7 @@ export default function WishListProvider({ children }) {
         }
         else {
             setCount(count - 1)
-            setList(prev => [prev.filter((item) => item !== value)])
+            setList(prev => prev.filter((item) => item !== value))
         }
     }
 
