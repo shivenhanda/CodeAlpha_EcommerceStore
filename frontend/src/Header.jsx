@@ -12,7 +12,7 @@ export default function Header() {
                     <Link to="/">Home</Link>
                     <input className="border-2 border-b-gray-500 py-0 px-5 rounded-lg h-6 my-1 w-48" type="search" name="search" id="search" placeholder="Enter to Search" />
                     <Link to="/wishlist"><i className="fa-solid fa-heart text-2xl my-1.5"></i><sub>{count}</sub></Link>
-                    <i className="fa-solid fa-cart-shopping text-2xl my-2"></i>
+                    <Link to="/cart"><i className="fa-solid fa-cart-shopping text-2xl my-2"></i></Link>
                 </div>
             </div>
         </>
