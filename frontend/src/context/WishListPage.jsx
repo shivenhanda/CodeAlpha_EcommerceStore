@@ -4,7 +4,7 @@ import { wishListContext } from "./WishList"
 
 export default function WishListPage() {
     const { width,product } = useContext(wishListContext)
-    if (product.length === 0) return <p>No products found</p>;
+    if (product.length === 0) return <p className="text-center">No products found</p>;
     console.log(product.length)
     return (
         <>
