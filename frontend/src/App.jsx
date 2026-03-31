@@ -6,6 +6,7 @@ import Header from "./Header"
 import WishList from "./context/WishList"
 import WishListProvider from "./context/WishList"
 import WishListPage from "./context/WishListPage"
+import AuthPage from "./auth/AuthPage"
 
 export default function App() {
   return(
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/" element={<ProductList/>}/>
       <Route path="/wishlist" element={<WishListPage/>}/>
       <Route path="/product/:id" element={<ProductShow/>}/>
+      <Route path="/auth" element={<AuthPage/>}/>
       <Route/>
     </Routes>
     </WishListProvider>
