@@ -1,10 +1,11 @@
 import React from 'react'
+import Signup from './Signup'
 
 export default function AuthPage() {
   return (
     <div>
-        <div className="flex justify-center">
-            Signup/Login
+        <div>
+            <Signup/>
         </div>
     </div>
   )
