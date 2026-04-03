@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FetchProductId from "./api/FetchProductId";
 import { wishListContext } from "./context/WishList";
+import { CartListContext } from "./context/CartProvider";
 
 export default function ProductShow() {
     const { id } = useParams();
     const [liked, setLiked] = useState(false)
     const [product, setProduct] = useState(null)
     const { AddList ,list} = useContext(wishListContext)
+    const {CartList}=useContext(CartListContext)
     const navigate = useNavigate();
     useEffect(() => {
         async function getProduct() {
@@ -26,6 +28,9 @@ export default function ProductShow() {
         setLiked(!liked)
         AddList(product.id)
     }
+    function AddToCart(productId){
+        CartList(productId)
+    }
     return (
         <div className="product-detail md:flex flex-col w-full pl-2 pr-10">
             <button className="text-start" onClick={() => navigate(-1)}><i className="fa-solid fa-arrow-left"></i> Back</button>
@@ -34,6 +39,10 @@ export default function ProductShow() {
                 <img className="mx-auto" src={product.thumbnail} alt={product.title} />
             </div>
             <div className="w-full flex justify-end dropShadow"><i className={`fa-solid fa-heart text-2xl p-5 heart ${liked ? "text-red-600" : "text-blue-300"}`} onClick={() => AddToWishList(product)}></i>
+            </div>
+            <div className="flex flex-col gap-1 justify-center items-center">
+            <button className="inline-block text-lg md:text-2xl border rounded p-2 w-50" onClick={()=>AddToCart(product.id)}>Add to Cart</button>
+            <button className="inline-block text-lg md:text-2xl bg-yellow-300 border rounded p-2 w-50" onClick={()=>AddToCart(product.id)}>Buy Now</button>
             </div>
             <p className="text-lg md:text-2xl font-semibold">Category: <span className="text-base md:text-lg font-normal">{capitalizeFirstLetter(product.category)}</span></p>
             <p className="text-lg md:text-2xl font-semibold">Rating: <span className="text-base md:text-lg font-normal reviewratings"><i className="fa-regular fa-star"></i> {product.rating}</span></p>

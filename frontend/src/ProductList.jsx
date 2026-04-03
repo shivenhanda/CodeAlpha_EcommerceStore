@@ -29,6 +29,7 @@ export default function ProductList() {
                 <div className="products">
                     {products.slice((page - 1) * itemPerPage, page * itemPerPage).map((item) => {
                         return <div key={item.id} className="singleproduct" onClick={() => navigate(`/product/${item.id}`)}>
+                            
                             <img src={item.thumbnail} alt={item.id} />
                             <span className="ratings text-base md:text-lg">
                                 <i className="fa-regular fa-star"></i> {item.rating}</span>
