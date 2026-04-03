@@ -10,7 +10,7 @@ export default function CartPage() {
                  product.map((item) => {
                      return <div key={item.id}>
                          <div className={`w-full flex ${width < 400 ? 'flex-col justify-center items-center' : "justify-between"}`}>
-                             <span className='w-80 flex justify-end'>{width<=400?<i className="fa-solid fa-x text-red-500 text-2xl" onClick={()=>RemoveCartList(item.id)}></i>:""}</span>
+                             <span className={`w-80 flex justify-end ${width<=400?"":"hidden"}`}>{width<=400?<i className="fa-solid fa-x text-red-500 text-2xl" onClick={()=>RemoveCartList(item.id)}></i>:""}</span>
                              <img src={item.thumbnail} alt={item.title} />
                              <div className="flex flex-col p-2">
                                  <h1 className="text-lg md:text-2xl text-center font-bold">{item.title}</h1>
