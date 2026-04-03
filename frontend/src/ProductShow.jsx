@@ -3,13 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import FetchProductId from "./api/FetchProductId";
 import { wishListContext } from "./context/WishList";
 import { CartListContext } from "./context/CartProvider";
+import FetchProducts from "./api/FetchProducts";
 
 export default function ProductShow() {
     const { id } = useParams();
     const [liked, setLiked] = useState(false)
     const [product, setProduct] = useState(null)
-    const { AddList ,list} = useContext(wishListContext)
-    const {CartList}=useContext(CartListContext)
+    const { AddList, list } = useContext(wishListContext)
+    const { CartList } = useContext(CartListContext)
+    const [Product, setProducts] = useState([])
+    useEffect(() => {
+        async function getProducts() {
+            const data = await FetchProducts()
+            setProducts(data)
+        }
+        getProducts();
+    }, [])
     const navigate = useNavigate();
     useEffect(() => {
         async function getProduct() {
@@ -28,7 +37,7 @@ export default function ProductShow() {
         setLiked(!liked)
         AddList(product.id)
     }
-    function AddToCart(productId){
+    function AddToCart(productId) {
         CartList(productId)
     }
     return (
@@ -41,8 +50,8 @@ export default function ProductShow() {
             <div className="w-full flex justify-end dropShadow"><i className={`fa-solid fa-heart text-2xl p-5 heart ${liked ? "text-red-600" : "text-blue-300"}`} onClick={() => AddToWishList(product)}></i>
             </div>
             <div className="flex flex-col gap-1 justify-center items-center">
-            <button className="inline-block text-lg md:text-2xl border rounded p-2 w-50" onClick={()=>AddToCart(product.id)}>Add to Cart</button>
-            <button className="inline-block text-lg md:text-2xl bg-yellow-300 border rounded p-2 w-50" onClick={()=>AddToCart(product.id)}>Buy Now</button>
+                <button className="inline-block text-lg md:text-2xl border rounded p-2 w-50" onClick={() => AddToCart(product.id)}>Add to Cart</button>
+                <button className="inline-block text-lg md:text-2xl bg-yellow-300 border rounded p-2 w-50" onClick={() => AddToCart(product.id)}>Buy Now</button>
             </div>
             <p className="text-lg md:text-2xl font-semibold">Category: <span className="text-base md:text-lg font-normal">{capitalizeFirstLetter(product.category)}</span></p>
             <p className="text-lg md:text-2xl font-semibold">Rating: <span className="text-base md:text-lg font-normal reviewratings"><i className="fa-regular fa-star"></i> {product.rating}</span></p>
@@ -71,6 +80,20 @@ export default function ProductShow() {
                     </div>
                 })
             }
+            <p className="text-lg md:text-2xl font-semibold text-center">Similar Products</p>
+            <div className="products">
+                {Product.map((item) => {
+                    if (item.category === product.category) {
+                        return <div key={item.id} className="singleproduct" onClick={() => navigate(`/product/${item.id}`)}>
+
+                            <img src={item.thumbnail} alt={item.id} />
+                            <span className="ratings text-base md:text-lg">
+                                <i className="fa-regular fa-star"></i> {item.rating}</span>
+                            <span className="text-base md:text-lg">{item.title}</span>
+                        </div>
+                    }
+                })}
+            </div>
         </div>
     )
 }
