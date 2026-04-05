@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Signup() {
   return (
-    <form action="" className="flex justify-center items-center flex-col gap-1">
+    <form method="post" action="/signup" className="flex justify-center items-center flex-col gap-1">
       <label htmlFor="user">Enter Username</label>
       <input type="text" name="user" id="user" className="border border-black rounded-xl text-center"/>
       <label htmlFor="email">Enter Email</label>
