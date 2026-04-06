@@ -8,23 +8,42 @@ import WishListPage from "./context/WishListPage"
 import AuthPage from "./auth/AuthPage"
 import CartProvider from "./context/CartProvider"
 import CartPage from "./context/CartPage"
+import { useEffect, useState } from "react"
 
 export default function App() {
-  return(
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/profile", {
+      method: "GET",
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          console.log(res)
+          setUser(res.user);
+        } else {
+          setUser(null);
+        }
+      })
+  }, []);
+
+  return (
     <>
-    <CartProvider>
-    <WishListProvider>
-    <Header/>
-    <Routes>
-      <Route path="/" element={<ProductList/>}/>
-      <Route path="/wishlist" element={<WishListPage/>}/>
-      <Route path="/product/:id" element={<ProductShow/>}/>
-      <Route path="cart" element={<CartPage/>}/>
-      <Route path="/auth" element={<AuthPage/>}/>
-      <Route/>
-    </Routes>
-    </WishListProvider>
-    </CartProvider>
+      <CartProvider>
+        <WishListProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<ProductList />} />
+            <Route path="/wishlist" element={<WishListPage />} />
+            <Route path="/product/:id" element={<ProductShow />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+          </Routes>
+
+        </WishListProvider>
+      </CartProvider>
     </>
-  )
+  );
 }
