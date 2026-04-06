@@ -9,9 +9,31 @@ import NewUser from './Model.js'
 const app = express()
 const port = 8000
 
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:8000",
+  credentials: true
+}));
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.static(path.join(process.cwd(), "..", "frontend", "dist")))
+app.use(checkcookie)
+
+function checkcookie(req,res,next){
+    try{if(req.cookies.token){
+        let decoded=jwt.verify(req.cookies.token,"secret")
+        req.user=decoded;
+    }}catch(error){
+        req.user=null
+    }
+    next()
+}
+
+app.get("/api/profile", async (req, res) => {
+    if(req.user){
+        return res.json({success:true,user:req.user})
+    }
+    return res.json({success:false,user:null})
+})
 
 app.post("/api/SignUp", async (req, res) => {
     const { user, email, password } = req.body
@@ -33,7 +55,7 @@ app.post("/api/SignUp", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true
         })
-        return res.json({ success: true, message: "Signup Successfully" })
+        return res.json({ success: true, message: "Signup Successfully",user:req.user })
     }
     catch (error) {
         console.log(error)
@@ -55,7 +77,7 @@ app.post("/api/Login", async (req, res) => {
         res.cookie("token",token,{
             httpOnly:true
         })
-        return res.json({success:true,message:"Login Successfully"})
+        return res.json({success:true,message:"Login Successfully",user:req.user})
     }
     catch (error) {
         console.log(error)
