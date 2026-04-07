@@ -9,10 +9,7 @@ import NewUser from './Model.js'
 const app = express()
 const port = 8000
 
-app.use(cors({
-  origin: "http://localhost:8000",
-  credentials: true
-}));
+app.use(cors());
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static(path.join(process.cwd(), "..", "frontend", "dist")))
@@ -51,11 +48,11 @@ app.post("/api/SignUp", async (req, res) => {
             email,
             password: hashpassword
         })
-        let token = jwt.sign({ email }, "secret")
+        let token = jwt.sign({ user }, "secret")
         res.cookie("token", token, {
             httpOnly: true
         })
-        return res.json({ success: true, message: "Signup Successfully",user:req.user })
+        return res.json({ success: true, message: "Signup Successfully",user:user })
     }
     catch (error) {
         console.log(error)
@@ -77,7 +74,7 @@ app.post("/api/Login", async (req, res) => {
         res.cookie("token",token,{
             httpOnly:true
         })
-        return res.json({success:true,message:"Login Successfully",user:req.user})
+        return res.json({success:true,message:"Login Successfully",user:user})
     }
     catch (error) {
         console.log(error)
