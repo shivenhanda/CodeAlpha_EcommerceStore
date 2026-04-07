@@ -1,6 +1,7 @@
 import {useForm} from 'react-hook-form'
-
-export default function Signup() {
+import { useNavigate } from 'react-router-dom'
+export default function Signup({setUser}) {
+  const navigate=useNavigate()
   const {
     register,
     handleSubmit,
@@ -18,12 +19,13 @@ export default function Signup() {
         body:JSON.stringify(data)
       })
       res=await res.json();
-      if(!res.success){
-        alert(res.message)
-      }
-      else{
-        alert(res.message)
-      }
+      if (res.success) {
+        console.log(res.user)
+          setUser(res.user);
+          navigate("/")
+        } else {
+          setUser(null);
+        }
     }
     catch(error){
       console.log("error",error)

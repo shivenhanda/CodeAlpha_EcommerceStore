@@ -12,6 +12,7 @@ import { useEffect, useState } from "react"
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [loading,setLoading]=useState(true)
 
   useEffect(() => {
     fetch("http://localhost:8000/api/profile", {
@@ -21,12 +22,13 @@ export default function App() {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-          console.log(res)
-          setUser(res.user);
+
+          setUser(res.user.user);
         } else {
           setUser(null);
         }
       })
+      .finally(()=>setLoading(false))
   }, []);
 
   return (
@@ -39,7 +41,7 @@ export default function App() {
             <Route path="/wishlist" element={<WishListPage />} />
             <Route path="/product/:id" element={<ProductShow />} />
             <Route path="cart" element={<CartPage />} />
-            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth" element={!loading?<AuthPage user={user} setUser={setUser}/>:null} />
           </Routes>
 
         </WishListProvider>
