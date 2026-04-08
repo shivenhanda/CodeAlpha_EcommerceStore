@@ -4,7 +4,7 @@ import FetchProductId from "../api/FetchProductId";
 
 export const wishListContext = createContext();
 
-export default function WishListProvider({ children }) {
+export default function WishListProvider({ children, user }) {
     const [count, setCount] = useState(0);
     const [list, setList] = useState([]);
     const [product, setProduct] = useState([])
@@ -25,9 +25,52 @@ export default function WishListProvider({ children }) {
             );
             setProduct(products);
         }
-
         loadProducts();
     }, [list])
+
+    useEffect(() => {
+        async function fetchWishlist() {
+            if (!user || !navigator.onLine) return;
+            try {
+                const res = await fetch("http://localhost:8000/api/wishlistData", {
+                    method: "GET"
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setList(data.wishlist || []);
+                    setCount(data.wishlist?.length || 0);
+                }
+            } catch (error) {
+                console.log("fetch wishlist error", error);
+            }
+        }
+        fetchWishlist();
+    }, [user]);
+
+    useEffect(() => {
+        async function syncWishlist() {
+            if (!user || !navigator.onLine) return;
+            try {
+                let res = await fetch("http://localhost:8000/api/wishlistData", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        wishlist: list
+                    })
+                });
+                res=await res.json();
+                if(!res.success){
+                    console.log(res.message)
+                }
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+
+        syncWishlist();
+    }, [list]);
     function AddList(value) {
         if (!list.includes(value)) {
             setCount(count + 1);
@@ -38,7 +81,6 @@ export default function WishListProvider({ children }) {
             setList(prev => prev.filter((item) => item !== value))
         }
     }
-
     return (
         <wishListContext.Provider value={{ count, AddList, list, width, product }}>
             {children}

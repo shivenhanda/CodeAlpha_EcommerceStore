@@ -22,7 +22,7 @@ export default function Login({setUser}) {
       })
       res=await res.json()
       if (res.success) {
-          console.log(res.user)
+          console.log(res.data)
           setUser(res.user);
           navigate("/")
         } else {

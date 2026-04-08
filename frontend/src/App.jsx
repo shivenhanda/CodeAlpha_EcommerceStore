@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch("http://localhost:8000/api/profile", {
@@ -22,26 +22,26 @@ export default function App() {
       .then(res => res.json())
       .then(res => {
         if (res.success) {
-
+          console.log("req.user",res.user)
           setUser(res.user.user);
         } else {
           setUser(null);
         }
       })
-      .finally(()=>setLoading(false))
+      .finally(() => setLoading(false))
   }, []);
 
   return (
     <>
-      <CartProvider>
-        <WishListProvider>
+      <CartProvider user={user}>
+        <WishListProvider user={user}>
           <Header />
           <Routes>
             <Route path="/" element={<ProductList />} />
             <Route path="/wishlist" element={<WishListPage />} />
             <Route path="/product/:id" element={<ProductShow />} />
             <Route path="cart" element={<CartPage />} />
-            <Route path="/auth" element={!loading?<AuthPage user={user} setUser={setUser}/>:null} />
+            <Route path="/auth" element={!loading ? <AuthPage user={user} setUser={setUser} /> : null} />
           </Routes>
 
         </WishListProvider>
