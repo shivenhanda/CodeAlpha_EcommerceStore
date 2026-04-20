@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import FetchProductId from "../api/FetchProductId";
+import { useAuth } from "./AuthContext";
 
 
 export const wishListContext = createContext();
 
-export default function WishListProvider({ children, user }) {
+export default function WishListProvider({ children }) {
+    const { user } = useAuth();
     const [count, setCount] = useState(0);
     const [list, setList] = useState([]);
     const [product, setProduct] = useState([])

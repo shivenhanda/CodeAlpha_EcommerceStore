@@ -10,7 +10,7 @@ export default function ProductShow() {
     const [liked, setLiked] = useState(false)
     const [product, setProduct] = useState(null)
     const { AddList, list } = useContext(wishListContext)
-    const { CartList } = useContext(CartListContext)
+    const { addToCart } = useContext(CartListContext)
     const [Product, setProducts] = useState([])
     useEffect(() => {
         async function getProducts() {
@@ -38,7 +38,7 @@ export default function ProductShow() {
         AddList(product.id)
     }
     function AddToCart(productId) {
-        CartList(productId)
+        addToCart(productId, 1)
     }
     return (
         <div className="product-detail md:flex flex-col w-full pl-2 pr-10">

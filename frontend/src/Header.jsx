@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { wishListContext } from "./context/WishList";
-import { useContext } from "react";
 import { CartListContext } from "./context/CartProvider";
+import { useAuth } from "./context/AuthContext";
+import { useContext } from "react";
 
 export default function Header() {
     const { count } = useContext(wishListContext)
-    const { list } = useContext(CartListContext)
+    const { cartList } = useContext(CartListContext)
+    const { user, logout } = useAuth()
     return (
         <>
             <div className=" md:flex md:justify-between md:px-10 px-3  my-2 text-center">
@@ -14,8 +16,19 @@ export default function Header() {
                     <Link to="/">Home</Link>
                     <input className="border-2 border-b-gray-500 py-0 px-5 rounded-lg h-6 my-1 w-48" type="search" name="search" id="search" placeholder="Enter to Search" />
                     <Link to="/wishlist"><i className="fa-solid fa-heart text-2xl my-1.5"></i><sub>{count}</sub></Link>
-                    <Link to="/cart"><i className="fa-solid fa-cart-shopping text-2xl my-1.5"></i><sub>{list.length}</sub></Link>
-                    <Link to="/auth"><i className="fa-solid fa-circle-user text-2xl my-1.5"></i></Link>
+                    <Link to="/cart"><i className="fa-solid fa-cart-shopping text-2xl my-1.5"></i><sub>{cartList.length}</sub></Link>
+                    {user ? (
+                        <div className="flex items-center space-x-2">
+                            <span className="text-sm">{user}</span>
+                            <button onClick={logout} className="text-red-500 hover:text-red-700">
+                                <i className="fa-solid fa-right-from-bracket text-xl"></i>
+                            </button>
+                        </div>
+                    ) : (
+                        <Link to="/auth">
+                            <i className="fa-solid fa-circle-user text-2xl my-1.5"></i>
+                        </Link>
+                    )}
                 </div>
             </div>
         </>
