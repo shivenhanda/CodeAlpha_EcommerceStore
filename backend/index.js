@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
-import { NewUser, WishListData, CartListData } from './Model.js'
+import { NewUser, WishListData, CartListData, Product, Order } from './Model.js'
 import { log } from 'console'
 
 const app = express()
@@ -19,7 +19,6 @@ app.use(checkcookie)
 function checkcookie(req,res,next){
     try{if(req.cookies.token){
         let decoded=jwt.verify(req.cookies.token,"secret")
-        console.log("working");
         req.user=decoded;
     }}catch(error){
         console.log("check cookies")
@@ -88,11 +87,14 @@ app.post("/api/Login", async (req, res) => {
     }
 })
 
+app.post("/api/logout", (req, res) => {
+    res.clearCookie("token");
+    res.json({success: true});
+});
+
 app.get("/api/wishlistData", async (req, res) => {
-    console.log("API Hit")
     try {
         const user = req.user?.user;
-        console.log("user",user)
         if (!user) {
             return res.json({ success: false, message: "no user" });
         }
@@ -138,7 +140,6 @@ app.get("/api/cartData", async (req, res) => {
 app.post("/api/cartData", async (req, res) => {
     try {
         const user = req.user?.user;
-        console.log("cart user",user)
         if (!user) {
             return res.json({ success: false, message: "no user" });
         }
@@ -150,6 +151,63 @@ app.post("/api/cartData", async (req, res) => {
         return res.json({ success: true ,message:data});
     } catch (error) {
         return res.json({ success: false, message: error.message });
+    }
+});
+
+app.get("/api/products", async (req, res) => {
+    try {
+        let products = await Product.find({});
+        if (products.length === 0) {
+            const mockData = [
+                { id: 1, name: "iPhone", price: 999, stock: 10 },
+                { id: 2, name: "Laptop", price: 1299, stock: 5 },
+                { id: 3, name: "Headphones", price: 199, stock: 20 }
+            ];
+            await Product.insertMany(mockData);
+            products = mockData;
+        }
+        res.json({ success: true, products });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+});
+
+app.post("/api/checkout", async (req, res) => {
+    try {
+        const user = req.user?.user;
+        if (!user) return res.json({ success: false, message: "no user" });
+        const { address } = req.body;
+        const cartData = await CartListData.findOne({ user });
+        const cartlist = cartData?.cartlist || [];
+        if (cartlist.length === 0) return res.json({ success: false, message: "empty cart" });
+    
+        const items = [];
+        let total = 0;
+        for (const item of cartlist) {
+            const prodRes = await fetch(`https://dummyjson.com/products/${item.id}`);
+            const product = await prodRes.json();
+            items.push({ productId: item.id, qty: item.qty, price: product.price });
+            total += product.price * item.qty;
+        }
+        
+        const newOrder = await Order.create({ user, items, total, address });
+        // Clear cart
+        await CartListData.findOneAndUpdate({ user }, { cartlist: [] });
+        
+        res.json({ success: true, orderId: newOrder._id, total });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+});
+
+app.get("/api/orders", async (req, res) => {
+    try {
+        const user = req.user?.user;
+        if (!user) return res.json({ success: false, message: "no user" });
+        const orders = await Order.find({ user }).sort({ date: -1 });
+        res.json({ success: true, orders });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
     }
 });
 
