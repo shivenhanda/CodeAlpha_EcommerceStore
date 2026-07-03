@@ -12,6 +12,8 @@ import OrderHistory from "./context/OrderHistory"
 import AuthProvider, { useAuth } from "./context/AuthContext"
 import ProductShow from "./ProductShow"
 import { useState } from "react"
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   return (
@@ -40,6 +42,7 @@ function Content() {
           </Routes>
         </WishListProvider>
       </CartProvider>
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }
