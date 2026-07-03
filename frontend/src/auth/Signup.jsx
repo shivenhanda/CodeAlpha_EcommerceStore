@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { toast } from "react-toastify";
 export default function Signup({ setUser, setForm }) {
   const navigate = useNavigate()
   const {
@@ -25,6 +26,7 @@ export default function Signup({ setUser, setForm }) {
         navigate("/")
       } else {
         setUser(null);
+        toast.error(res.message)
       }
     }
     catch (error) {
