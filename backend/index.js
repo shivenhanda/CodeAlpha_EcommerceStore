@@ -59,6 +59,7 @@ app.get("/auth/google/callback", passport.authenticate("google", {
 }),
     async (req, res) => {
         let token = jwt.sign({ user:req.user.user || null }, "secret")
+        console.log(token)
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
